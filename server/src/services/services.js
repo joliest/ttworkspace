@@ -1,3 +1,5 @@
+var validation = require('./validation');
+
 exports.getAllUsers = function(req, res, conn) {
     dbConn = conn;
     getAllUser(function(err, allUser) {
@@ -20,7 +22,6 @@ exports.getAllUsers = function(req, res, conn) {
                 message: "Unable to retrieve list of users"
             }
         }
-
         res.send(response);
     })
 }
@@ -63,28 +64,35 @@ exports.addUser = function(req, res, conn) {
     statement = "INSERT INTO user_tbl(firstname, lastname, gender, age, email, telephone)" +
                 "VALUES(?, ?, ?, ?, ?, ?)";
 
-    let firstname = req.body.firstname;
-    let lastname = req.body.lastname;
-    let gender = req.body.gender;
-    let age = req.body.age;
-    let email = req.body.email;
-    let telephone = req.body.telephone;
-
-    let data = [firstname, lastname, gender, age, email, telephone];
-
-    var msg ='';
-
-    conn.query(statement, data, (err, results, fields) => {
+    validation.validateData(req, function(err, message, user) {
         if (err) {
             res.send({
-                "message": "Unable to add user"
+                "message": err.message
             });
         } else {
-            res.send({
-                "message": "User added"
-            });
+            let data = [user.firstname, 
+                        user.lastname, 
+                        user.gender, 
+                        user.age, 
+                        user.email, 
+                        user.telephone];
+
+            var msg ='';
+            conn.query(statement, data, (err, results, fields) => {
+                if (err) {
+                     res.send({
+                         "message": "Unable to add user: " + err 
+                     });
+                 } else {
+                     res.send({
+                         "message": "User added",
+                         user
+                     });
+                 }
+             })
         }
     })
+    
 }
 
 exports.getUserById = function(req, res, conn) {
@@ -119,7 +127,7 @@ exports.getUserById = function(req, res, conn) {
 exports.updateUser = function(req, res, conn) {
     //run get users first, 
     //tehn create a duplicate and set the user_isdel to 1
-    let sqlQuery = "UPDATE user_tbl SET firstname = ?, " +
+    let statement = "UPDATE user_tbl SET firstname = ?, " +
                                         "lastname = ?, " +
                                         "gender = ?, " +
                                         "age = ?, " +
@@ -127,48 +135,84 @@ exports.updateUser = function(req, res, conn) {
                                         "telephone = ? " +
                                     "WHERE user_id = ?";
 
-    var user = {
-        firstname : req.body.firstname,
-        lastname : req.body.lastname,
-        gender : req.body.gender,
-        age : req.body.age,
-        email : req.body.email,
-        telephone : req.body.telephone,
-        user_id : req.body.user_id
+    let user_id = req.body.user_id;
+
+    let isUserIdValid = user_id ? user_id : null;
+
+    if(isUserIdValid) {
+        validation.validateData(req, function(err, message, user) {
+            if (err) {
+                res.send({
+                    "message": err.message
+                });
+            } else {
+                let data = [user.firstname, 
+                            user.lastname, 
+                            user.gender, 
+                            user.age, 
+                            user.email, 
+                            user.telephone,
+                            user_id];
+    
+                conn.query(statement, data, (err, results, fields) => {
+                    if (err) {
+                         res.send({
+                             "message": "Unable to update user: " + err 
+                         });
+                     } else if (results.affectedRows === 0) {
+                        res.send({
+                            "message": "user_id doesn't exists"
+                        });
+                     } else {
+                         res.send({
+                             "message": "User updated",
+                             user
+                         });
+                     }
+                 })
+            }
+        })
+    } else {
+        res.send({
+            "message": "user_id doesn't exists"
+        });
     }
 
-    let data = [user.firstname, user.lastname, user.gender, user.age, user.email, user.telephone, user.user_id]
-
-    conn.query(sqlQuery, data, (err, recordset) => {
-        if (err) {
-            res.send({
-                "message": err
-            });
-        } else {
-            res.send({
-                "message": "User updated"
-            });
-        }
-    })
+    
+    
 }
 
 exports.deleteUser = function(req, res, conn) {
     let sqlQuery = "UPDATE user_tbl SET user_isdel = 1 " +
                                     "WHERE user_id = ?";
 
-    var user_id = req.body.user_id;
+    let user_id = req.body.user_id;
 
-    let data = [user_id]
+    let isUserIdValid = user_id ? user_id : null;
 
-    conn.query(sqlQuery, data, (err, recordset) => {
-        if (err) {
-            res.send({
-                "message": err
-            });
-        } else {
-            res.send({
-                "message": "User deleted"
-            });
-        }
-    })
+    if(isUserIdValid) {
+        let data = [user_id]
+
+        conn.query(sqlQuery, data, (err, results) => {
+            if (err) {
+                res.send({
+                    "message": err
+                });
+            } else if (results.affectedRows === 0) {
+                res.send({
+                    "message": "user_id doesn't exists"
+                });
+             } else {
+                res.send({
+                    "message": "User deleted"
+                });
+            }
+        })
+    } else {
+        res.send({
+            "message": "user_id is invalid"
+        });
+    }
+
+    
 }

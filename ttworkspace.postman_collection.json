@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "957a2fe6-2d6e-4cfe-acaa-e3598dbc455d",
+		"name": "ttworkspace",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Test Registration",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "message",
+						"value": "hi",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\": \"Jolivesasasrolivesasasr\",\n    \"lastname\": \"Estampador\",\n    \"gender\": \"Male\",\n    \"email\": \"joliver.estampador@tooltwist.com\",\n    \"telephone\": \"+63 906 402 8957\",\n    \"age\": \"99\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "message",
+						"type": "text",
+						"value": "hi",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\": \"Joliver\",\n    \"lastname\": \"Estampador\",\n    \"gender\": \"Male\",\n    \"email\": \"joliver.estampador@tooltwist.com\",\n    \"telephone\": \"+63 906 402 8957\",\n    \"age\": \"99\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\": \"Joliver_Updated\",\n    \"lastname\": \"Estampadorr_Updated\",\n    \"gender\": \"Male\",\n    \"email\": \"joliver.updated@tooltwist.com\",\n    \"telephone\": \"+63 906 402 8957\",\n    \"age\": \"12\",\n    \"user_id\": 1\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"update"
+					]
+				},
+				"description": "Requires valid user_id to work\nValues are validated"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": ""
+				},
+				"description": "Requires valid user_id to work"
+			},
+			"response": []
+		}
+	]
+}
