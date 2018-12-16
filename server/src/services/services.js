@@ -13,7 +13,7 @@ exports.getAllUsers = function(req, res, conn) {
             response = {
                 status: "200", 
                 allUser: allUser,
-                message: "Users successfull retrieved"
+                message: "Users successfully retrieved"
             };
         } else {
             response = {
@@ -84,7 +84,8 @@ exports.addUser = function(req, res, conn) {
                          "message": "Unable to add user: " + err 
                      });
                  } else {
-                     res.send({
+                     res.send({    
+                        "status": "200", 
                          "message": "User added",
                          user
                      });
@@ -165,6 +166,7 @@ exports.updateUser = function(req, res, conn) {
                         });
                      } else {
                          res.send({
+                            "status": "200", 
                              "message": "User updated",
                              user
                          });
@@ -204,6 +206,7 @@ exports.deleteUser = function(req, res, conn) {
                 });
              } else {
                 res.send({
+                    "status": "200", 
                     "message": "User deleted"
                 });
             }

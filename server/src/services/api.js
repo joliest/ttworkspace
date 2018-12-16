@@ -17,7 +17,7 @@ module.exports.init = function init(server, dbConnection) {
         services.updateUser(req, res, dbConnection);
     });
 
-    server.delete('/delete', (req, res) => {
+    server.post('/delete', (req, res) => {
         services.deleteUser(req, res, dbConnection);
     });
 }
