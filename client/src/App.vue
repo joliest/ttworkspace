@@ -1,28 +1,25 @@
 <template>
-  <div id="app">
-    
-    <h1>User Management App</h1>
-    <h6>By: Joliver Estampador</h6>
-
-    <!-- <router-view/>  -->
-    
-    <div v-show="addUserIsVisible">
-      <add-user></add-user>
-    </div>
-    <div v-show="editUserIsVisible">
-      <edit-user :userObj="selectedUserObj"></edit-user>
-    </div>
-    <div v-show="userListIsVisible">
-      <user-table @selectedUserObj = "selectedUserObj = $event"></user-table>
-    </div>
-    <div>
-      <button type="button"
-              @click="showAddUserComponent()">Add</button>
-      <button type="button"
-              @click="showEditUserComponent()">Edit</button>
-      <button type="button"
-              @click="deleteUser()">Delete</button>
-    </div>
+  <div id="app" class="app">
+      <!-- <router-view/>  -->
+      <div class="row">
+        <div v-if="userListIsVisible" class="col-sm-4">
+          
+          <user-table @selectedUserObj = "selectedUserObj = $event"
+                      @showEditUser = "editUserIsVisible = $event"
+                      @hideAddUser = "addUserIsVisible = $event"></user-table>
+                      
+        <button type="button"
+                class="btn btn-primary add-btn"
+                @click="showAddUserComponent()">Add</button>
+        </div>
+        <div v-if="addUserIsVisible" class="col-sm-4">
+          <add-user @hideAddUser = "addUserIsVisible = $event"></add-user>
+        </div>
+        <div v-if="editUserIsVisible" class="col-sm-4">
+          <edit-user :userObj="selectedUserObj"
+                     @hideEditUser = "editUserIsVisible = $event"></edit-user>
+        </div>
+      </div>
   </div>
 </template>
 
@@ -60,19 +57,15 @@ export default {
       }
     },
     showAddUserComponent() {
-    },
-    showEditUserComponent() {
+      this.addUserIsVisible = true;
+      this.editUserIsVisible = false;
     }
   }
 }
 </script>
 
 <style>
-/* .add-user-position {
-  position: absolute;
-  top:10px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}  */
+.add-btn {
+  width: 440px;
+}
 </style>

@@ -33,7 +33,7 @@
     </form>
     <p class="bg-danger">{{ responseError }}</p>
     <button type="button" class="btn primary" @click="add()">Add</button>
-    <button type="button" class="btn primary">Cancel</button>
+    <button type="button" class="btn primary" @click="cancel()">Cancel</button>
   </div>
 </template>
 
@@ -46,7 +46,7 @@ export default {
           firstname: '',
           lastname: '',
           email: '',
-          contact: '',
+          telephone: '',
           age: '',
           gender: ''
       },
@@ -59,8 +59,20 @@ export default {
         if (response.data.status !== "200") {
             this.responseError = response.data.message;
         } else {
+            this.clear();
             alert(response.data.message);
         }
+    },
+    cancel() {
+      this.$emit('hideAddUser', false);    
+    },
+    clear() {
+        this.user.firstname = '',
+        this.user.lastname = '',
+        this.user.email = '',
+        this.user.telephone = '',
+        this.user.age = '',
+        this.user.gender = ''
     }
   }
 }
@@ -69,5 +81,9 @@ export default {
 <style scoped>
 div {
     text-align: left;
+}
+
+.container {
+    width: 400px;
 }
 </style>

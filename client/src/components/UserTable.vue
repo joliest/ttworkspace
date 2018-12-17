@@ -1,29 +1,35 @@
 <template>
   <div class="table-responsive">
-    <table class="table table-bordered">
+    <div class="user-table">
+    <h1>User Management App</h1>
+      <table class="table table-bordered">
         <thead>
             <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Contact No.</th>
-                <th>Gender</th>
-                <th>Age</th>
+                <th>User Information</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             <tr  :key="user.user_id"
                  v-for="user in users"
                  @click="selectRow(user)">
-                <td> {{user.firstname}} </td>
-                <td> {{user.lastname}} </td>
-                <td> {{user.email}} </td>
-                <td> {{user.telephone}} </td>
-                <td> {{user.gender}} </td>
-                <td> {{user.age}} </td>
+
+                 <td>
+                   <p class="user-full-name">
+                     {{user.firstname}} {{ user.lastname}} | {{ user.age }} | {{ user.gender }} <br>
+                      <span class="user-info"> 
+                        {{user.email}} | {{ user.telephone }}
+                      </span>
+                   </p>
+                 </td>
+                 <td>
+                   <span @click="showEditComponent()">Edit </span> |
+                   <span @click="deleteRow(user)">Delete </span>
+                 </td>
             </tr>
         </tbody>
     </table>
+    </div>
   </div>
 </template>
 
@@ -33,7 +39,7 @@ export default {
   data() {
     return {
       users: [],
-      selectedUserId: ''
+      selectedUserId: '',
     }
   },
   methods: {
@@ -42,9 +48,25 @@ export default {
       this.users = response.data.allUser;
     },
     selectRow(userObj) {
-      console.log(userObj);
       this.selectedUserId = userObj;
       this.$emit('selectedUserObj', userObj);
+    },
+    showEditComponent() {
+      this.$emit('showEditUser', true);
+      this.$emit('hideAddUser', false);
+    },
+    async deleteRow(user) {
+        let confirmation = confirm("Are you sure you want to delete " + user.firstname + " " + user.lastname + "?");
+        if (confirmation) {
+          const response = await AuthenticationServices.deleteUser(user);
+          if (response.data.status !== "200") {
+              this.responseError = response.data.message;
+              console.log(this.responseError);
+          } else {
+              this.$forceUpdate();
+              alert(response.data.message);
+          }
+        }
     }
   },
   created() {
@@ -52,3 +74,18 @@ export default {
   }
 }
 </script>
+<style scoped>
+.user-full-name {
+  text-transform: capitalize;
+  font-size: 15px;
+}
+
+.user-info {
+  font-size: 12px;
+}
+
+.table {
+  width: 440px;
+}
+
+</style>

@@ -33,7 +33,7 @@
     </form>
     <p class="bg-danger">{{ responseError }}</p>
     <button type="button" class="btn primary" @click="save()">Save</button>
-    <button type="button" class="btn primary">Cancel</button>
+    <button type="button" class="btn primary" @click="cancel()">Cancel</button>
   </div>
 </template>
 
@@ -53,8 +53,12 @@ export default {
             this.responseError = response.data.message;
             console.log(this.responseError);
         } else {
+            this.$emit('hideEditUser', false);
             alert(response.data.message);
         }
+    },
+    cancel() {
+      this.$emit('hideEditUser', false);
     }
   }
 }
@@ -63,6 +67,10 @@ export default {
 <style scoped>
 div {
     text-align: left;
+}
+
+.container {
+    width: 400px;
 }
 
 </style>
