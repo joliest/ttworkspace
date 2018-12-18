@@ -13,7 +13,7 @@
                 @click="showAddUserComponent()">Add</button>
         </div>
         <div v-if="addUserIsVisible" class="col-sm-4">
-          <add-user @hideAddUser = "addUserIsVisible = $event"></add-user>
+          <add-user @hideAddUser = "hideAddComponent($event)"></add-user>
         </div>
         <div v-if="editUserIsVisible" class="col-sm-4">
           <edit-user :userObj="selectedUserObj"
@@ -59,6 +59,11 @@ export default {
     showAddUserComponent() {
       this.addUserIsVisible = true;
       this.editUserIsVisible = false;
+      this.userListIsVisible = false;
+    },
+    hideAddComponent(event) {
+      this.addUserIsVisible = event;
+      this.userListIsVisible = true;
     }
   }
 }
