@@ -11,7 +11,7 @@
         </thead>
         <tbody>
             <tr  :key="user.user_id"
-                 v-for="user in users"
+                 v-for="(user, index) in users"
                  @click="selectRow(user)">
 
                  <td>
@@ -24,7 +24,7 @@
                  </td>
                  <td>
                    <span @click="showEditComponent()">Edit </span> |
-                   <span @click="deleteRow(user)">Delete </span>
+                   <span @click="deleteRow(user, index)">Delete </span>
                  </td>
             </tr>
         </tbody>
@@ -55,7 +55,7 @@ export default {
       this.$emit('showEditUser', true);
       this.$emit('hideAddUser', false);
     },
-    async deleteRow(user) {
+    async deleteRow(user, index) {
         let confirmation = confirm("Are you sure you want to delete " + user.firstname + " " + user.lastname + "?");
         if (confirmation) {
           const response = await AuthenticationServices.deleteUser(user);
@@ -63,7 +63,7 @@ export default {
               this.responseError = response.data.message;
               console.log(this.responseError);
           } else {
-              this.$forceUpdate();
+              this.users.splice(index, 1);
               alert(response.data.message);
           }
         }
